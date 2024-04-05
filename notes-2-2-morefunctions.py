@@ -21,6 +21,14 @@ def stars(num_stars: int) -> str:
 
     return "*" * num_stars
 
+def pyramid(base_width: int):
+    """Prints a pyramind of stars of given base width
+
+    Params:
+        base_width - bottom row of stars
+    """
+    for i in range(base_width):
+            print(stars(i + 1))
 
 # Multiply Strings
 # greeting = "hello"
@@ -32,3 +40,7 @@ print(stars(1)) # *
 print(stars(100)) # "*" * 
 print(stars(0))
 print(stars(-1))
+
+pyramid(1)
+pyramid(5)
+pyramid(20)
