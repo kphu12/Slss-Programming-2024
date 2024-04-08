@@ -33,3 +33,23 @@ for item in grocery_list:
 # Use a for loop to count to 100
 for i in range(100):
     print(i + 1)
+
+# This loops repeats indefinitely
+
+# while True:
+#     print("This is an infinite loop")
+
+# while loops are useful for input validation
+# Ask the user if they like ice cream
+#   If they don't answer yes or no
+#       Repeat the question
+
+user_answer = input("Do you like ice cream?").lower().strip("!?.,")
+
+while user_answer not in ["yes", "no", "yeah", "nah"]:
+    user_answer = input("Seriously, do you like  ice cream?").lower().strip("!?.,")
+
+if user_answer in ["yes", "yeah"]:
+    print("Nice. I LOOOOVE ice cream, too.")
+elif user_answer in ["no", "nah"]:
+    print("How could you not like ice cream?")
