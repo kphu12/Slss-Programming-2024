@@ -42,6 +42,11 @@ class Pokemon: # use a capital letter for class name
         else:
             return f"{self.name} batted the {food} away"
 
+# Create a new child class of Pokemon
+class Pikachu(Pokemon):
+    def __init__(self):
+        # Call constructor of parent class
+        super().__init__()
 
 # Create two Pokemon using our class
 # Make one Pokemon that is Pikachu
