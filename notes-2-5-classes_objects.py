@@ -15,9 +15,33 @@ class Pokemon: # use a capital letter for class name
         self.weight = 0
         self.height = 0
         self.type = "normal"
+        self.actual_cry = "Rooooooooooar!"
 
 
         print("A new Pokemon is born!")
+    
+    def cry(self) -> str:
+        """Represents the sound a Pokemon makes
+
+        Returns:
+            - string representing the sound it makes"""
+        return f"{self.name} says, \"{self.actual_cry}\"!"
+
+    def eat(self, food: str) -> str:
+        """Represents feeding the Pokemon
+        
+        Params:
+            - food: what food you feed it
+
+        Return:
+            - what it says after eating it"""
+        if food.lower() == "berry":
+            return f"{self.name} at the berry and says, \"YUM!\""
+        elif food.lower() == "potion":
+            return f"{self.name} consued the potion and feels better"
+        else:
+            return f"{self.name} batted the {food} away"
+
 
 # Create two Pokemon using our class
 # Make one Pokemon that is Pikachu
@@ -45,10 +69,21 @@ print(pokemon_two.name)         # "Squirtke"
 
 pokemon_two.id = 4
 pokemon_two.type = "Water"
-pokemon_two.weight = "1'08''"
+pokemon_two.weight = "1\'08\""
 pokemon_two.height = "19.8 lbs"
 
 print(pokemon_two.id)
 print(pokemon_two.type)
 print(pokemon_two.weight)
 print(pokemon_two.height)
+
+pokemon_one.actual_cry = "Pikachu"
+pokemon_two.actual_cry = "Grraaaauuhhhh"
+
+print(pokemon_one.cry())
+print(pokemon_two.cry())
+
+# Test the eat method
+print(pokemon_one.eat("berry"))
+print(pokemon_one.eat("potion"))
+print(pokemon_one.eat("posion"))
