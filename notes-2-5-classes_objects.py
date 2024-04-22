@@ -72,6 +72,34 @@ class Pikachu(Pokemon):
         return response
     
 
+# Create a new child-class of pokemon for the type of your choice
+# If you don't know any pokemon, use this: https://pokemondb.net/pokedex/national
+#   - create a new child class
+#   - create a constructor and set the default values for its properties
+#       - i.e. its name, id, type, etc.
+#   - create a new method for its attack
+
+class Shuppet(Pokemon):
+    def __init__(self, name= "Shuppet"):
+        self.name = name
+        self.id = 353
+        self.actual_cry = "Blarrgeeeblargblarg"
+
+    def shadow_ball(self, defender: Pokemon) -> str:
+        pass
+
+     # Assign the default values to properties
+
+    def shadow_ball(self, defender: Pokemon) -> str:
+        """Ghost type attack"""
+        response = f"{self.name} used cursed body on {defender.name}."
+
+        if defender.type.lower() in ["psychic", "ghost"]:
+            response = response + " It was super effective!"
+        elif defender.type.lower() in ["dark"]:
+            response = response + " It was not very effective."
+
+        return response
 
 # Create two Pokemon using our class
 # Make one Pokemon that is Pikachu
