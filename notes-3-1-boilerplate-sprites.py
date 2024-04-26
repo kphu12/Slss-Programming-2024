@@ -18,6 +18,7 @@ GRAY = (128, 128, 128)
 WIDTH = 1280  # Pixels
 HEIGHT = 720
 SCREEN_SIZE = (WIDTH, HEIGHT)
+NUM_LOGOS = 20
 
 class Dvdlogo(pygame.sprite.Sprite):
     """Represents DVD logo sprite"""
@@ -87,7 +88,8 @@ def start():
     all_sprites = pygame.sprite.Group()
 
     # Add the DVD Logo object to the group of sprites
-    all_sprites.add(dvdlogo)
+    for _ in range (5):
+        all_sprites.add(Dvdlogo())
 
     # --MAIN LOOP--
     while not done:
@@ -95,6 +97,9 @@ def start():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.get_pressed()[pygame.K_SPACE]:
+                    all_sprites.add(Dvdlogo())
 
         # --- Update the world state
         # Update the location of EVERY SPRITE
