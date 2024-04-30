@@ -41,7 +41,7 @@ class Snowflake(pg.sprite.Sprite):
 
         #Initial Coords, Chooses random x coords
         self.rect.centerx = random.randrange(0, WIDTH + 1)
-        self.rect.centery = HEIGHT // 2
+        self.rect.centery = random.randrange(0, HEIGHT + 1)
 
 def start():
     """Environment Setup and Game Loop"""
