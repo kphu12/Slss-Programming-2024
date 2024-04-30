@@ -2,6 +2,7 @@
 # Create snowflakes falling
 
 import pygame as pg
+import random
 
 # --CONSTANTS--
 # COLOURS
@@ -37,7 +38,9 @@ class Snowflake(pg.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         # Spawn this in the middle of screen
-        self.rect.centerx = WIDTH // 2
+
+        #Initial Coords, Chooses random x coords
+        self.rect.centerx = random.randrange(0, WIDTH + 1)
         self.rect.centery = HEIGHT // 2
 
 def start():
@@ -53,8 +56,9 @@ def start():
     # All sprites go in this sprite Group
     all_sprites = pg.sprite.Group()
 
-    # Add one snowflake in the sprite Group
-    all_sprites.add(Snowflake(10))
+    # Create more snow
+    for _ in range (100):
+        all_sprites.add(Snowflake(10))
 
     pg.display.set_caption("Snow Falling")
 
