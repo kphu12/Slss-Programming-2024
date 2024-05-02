@@ -1,5 +1,7 @@
 # New and improved Pygame
 # Create snowflakes falling
+# Kendrick Phu
+# May 2, 2024
 
 import pygame as pg
 import random
