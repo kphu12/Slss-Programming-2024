@@ -41,7 +41,46 @@ class Coin(pg.sprite.Sprite):
         self.rect.centerx = random.randrange(0, WIDTH - self.rect.width)
         self.rect.centery = random.randrange(0, HEIGHT - self.rect.height)
 
-        
+class Enemy(pg.sprite.Sprite):
+
+    def __init__(self):
+        super().__init__()
+
+        # image -> visual representation
+        self.image = pg.image.load("./Images/dvd-logo.png")
+
+        # rect  -> hitbox representation
+        # get_rect() -> Rect
+        #     [x, y, width, height]
+        #     [0, 0, <width of image>, <height of image>]
+        self.rect = self.image.get_rect()
+
+        self.rect.x = random.randrange(0, WIDTH - self.rect.width)
+        self.rect.y = random.randrange(0, HEIGHT - self.rect.height)
+
+        # Velocity of the Dvd logo set randomly
+        self.vel_x = random.choice([-6, -5 -4, -3, 3, 4, 5, 6])
+        self.vel_y = random.choice([-6, -5 -4, -3, 3, 4, 5, 6])
+
+    def update(self):
+        # Update the location of the DVD log
+        self.rect.x += self.vel_x
+        self.rect.y +=self.vel_y
+
+        # Bouncef if reaches bottom
+        #   if the bottom of the sprite is past the bottom of screen
+        #   convert to negative (* -1)
+        if self.rect.bottom < 775:
+            self.vel_y *= -1
+        #Top
+        if self.rect.top > 0:
+            self.vel_y *= -1
+        #Left
+        if self.rect.left < 1100:
+            self.vel_x *= -1
+        #Right
+        if self.rect.right > 130:
+            self.vel_x *= -1        
     
 
 def start():
@@ -102,6 +141,14 @@ def start():
             score += 1
 
             print(score)
+
+        # if the coin_sprites is empty
+        # respawn all the coins
+        if len(coin_sprites) <= 0:
+                for _ in range(NUM_COINS):
+                    coin = Coin()
+                    all_sprites.add(coin)
+                    coin_sprites.add(coin)
 
         # --- Draw items
         screen.fill(WHITE)
