@@ -22,6 +22,12 @@ SCREEN_SIZE = (WIDTH, HEIGHT)
 NUM_COINS = 10
 NUM_ENEMIES = 5
 
+GOOMBA_IMAGE = pg.image.load("./Images/goomba.png")
+
+GOOMBA_IMAGE = pg.transform.scale(
+    GOOMBA_IMAGE,
+    (GOOMBA_IMAGE.get_width() // 2, GOOMBA_IMAGE.get_height() // 2)
+)
 
 class Player(pg.sprite.Sprite):
     def __init__(self):
@@ -68,7 +74,8 @@ class Goomba(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pg.image.load("./Images/goomba.png")
+        self.image = GOOMBA_IMAGE 
+
         self.rect = self.image.get_rect()
 
         # Spawn in a random location
