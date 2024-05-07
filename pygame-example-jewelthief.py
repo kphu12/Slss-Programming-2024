@@ -1,5 +1,9 @@
-import pygame as pg
+
+# pygame-exercise-jewelthief.py
+# Clone of Jewel Thief Game
+
 import random
+import pygame as pg
 
 # --CONSTANTS--
 # COLOURS
@@ -16,72 +20,84 @@ HEIGHT = 720
 SCREEN_SIZE = (WIDTH, HEIGHT)
 
 NUM_COINS = 10
+NUM_ENEMIES = 5
+
 
 class Player(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        
-        self.image = pg.image.load("./Images/Mario.webp")
-    
+
+        self.images = [
+            pg.image.load("./Images/mario.webp"),
+            pg.transform.flip(pg.image.load("./Images/mario.webp"), True, False),
+        ]
+
+        self.image = self.images[0]
+
         self.rect = self.image.get_rect()
-    
+
+        self.facing = 0  # 0 is right, 1 is left
+
     def update(self):
-        """Updates the loaction of sprite to the mouse cursor"""
-        self.rect.centerx = pg.mouse.get_pos()[0]
-        self.rect.centery = pg.mouse.get_pos()[1]
+        """Updates the location of sprite to the mouse cursor"""
+        next_pos = pg.mouse.get_pos()
+
+        if self.rect.centerx > next_pos[0]:
+            self.facing = 1
+        elif self.rect.centerx < next_pos[0]:
+            self.facing = 0
+
+        self.rect.center = next_pos
+        self.image = self.images[self.facing]
+
 
 class Coin(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self. image = pg.image.load("./Images/Coin.png")
-        
+        self.image = pg.image.load("./Images/coin.png")
+
         self.rect = self.image.get_rect()
 
-        self.rect.centerx = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.centery = random.randrange(0, HEIGHT - self.rect.height)
-
-class Enemy(pg.sprite.Sprite):
-
-    def __init__(self):
-        super().__init__()
-
-        # image -> visual representation
-        self.image = pg.image.load("./Images/dvd-logo.png")
-
-        # rect  -> hitbox representation
-        # get_rect() -> Rect
-        #     [x, y, width, height]
-        #     [0, 0, <width of image>, <height of image>]
-        self.rect = self.image.get_rect()
-
+        # Randomize initial location
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
         self.rect.y = random.randrange(0, HEIGHT - self.rect.height)
 
-        # Velocity of the Dvd logo set randomly
-        self.vel_x = random.choice([-6, -5 -4, -3, 3, 4, 5, 6])
-        self.vel_y = random.choice([-6, -5 -4, -3, 3, 4, 5, 6])
+
+class Goomba(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+        self.image = pg.image.load("./Images/goomba.png")
+        self.rect = self.image.get_rect()
+
+        # Spawn in a random location
+        self.rect.x = random.randrange(0, WIDTH - self.rect.width)
+        self.rect.y = random.randrange(0, HEIGHT - self.rect.height)
+
+        # Set initial velocity to some random value
+        self.vel_x = random.choice((-6, -5, -4, 4, 5, 6))
+        self.vel_y = random.choice((-6, -5, -4, 4, 5, 6))
 
     def update(self):
-        # Update the location of the DVD log
+        """Move the goomba and bounce it off the edge of the window"""
         self.rect.x += self.vel_x
-        self.rect.y +=self.vel_y
+        self.rect.y += self.vel_y
 
-        # Bouncef if reaches bottom
-        #   if the bottom of the sprite is past the bottom of screen
-        #   convert to negative (* -1)
-        if self.rect.bottom < 775:
-            self.vel_y *= -1
-        #Top
-        if self.rect.top > 0:
-            self.vel_y *= -1
-        #Left
-        if self.rect.left < 1100:
-            self.vel_x *= -1
-        #Right
-        if self.rect.right > 130:
-            self.vel_x *= -1        
-    
+        # Bounce
+        if self.rect.left < 0:
+            self.rect.left = 0  # keep it inside the screen
+            self.vel_x = -self.vel_x
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+            self.vel_x = -self.vel_x
+        if self.rect.top < 0:
+            self.rect.top = 0
+            self.vel_y = -self.vel_y
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+            self.vel_y = -self.vel_y
+
 
 def start():
     """Environment Setup and Game Loop"""
@@ -89,32 +105,38 @@ def start():
     pg.init()
     pg.mouse.set_visible(False)
 
-
-    # --Game State Variables--
+    # --Game St
+    # ate Variables--
     screen = pg.display.set_mode(SCREEN_SIZE)
     done = False
     clock = pg.time.Clock()
 
     score = 0
 
+    # -- Sprite Groups
     # All sprites go in this sprite Group
     all_sprites = pg.sprite.Group()
-
-    # Coin Sprities
     coin_sprites = pg.sprite.Group()
+    enemy_sprites = pg.sprite.Group()
 
+    # Create coins
     for _ in range(NUM_COINS):
         coin = Coin()
 
         all_sprites.add(coin)
         coin_sprites.add(coin)
 
-    # Create a player and store it in a varialbe
+    # Create a player and store it in a variable
     player = Player()
 
     all_sprites.add(player)
 
-    pg.display.set_caption("Jewel Thief Clone")
+    for _ in range(NUM_ENEMIES):
+        enemy = Goomba()
+        all_sprites.add(enemy)
+        enemy_sprites.add(enemy)
+
+    pg.display.set_caption("Jewel Thief Clone (Don't sue us Nintendo)")
 
     # --Main Loop--
     while not done:
@@ -126,29 +148,22 @@ def start():
         # --- Update the world state
         all_sprites.update()
 
-        # Coillision between player and coin_sprites
-        # Get a list of ALL coin_sprites that collide
-        #      with a player
-        # FOr every coin, that colides, print "COLLISION!"
-        coins_collided = pg.sprite.spritecollide(
-            player,
-            coin_sprites,
-            True
-        )
+        # Collision between player and coin_sprites
+        coins_collided = pg.sprite.spritecollide(player, coin_sprites, True)
 
         for coin in coins_collided:
-            # increase the score by 1 
+            # increase the score by 1
             score += 1
 
             print(score)
 
-        # if the coin_sprites is empty
+        # if the coin_sprites group is empty
         # respawn all the coins
         if len(coin_sprites) <= 0:
-                for _ in range(NUM_COINS):
-                    coin = Coin()
-                    all_sprites.add(coin)
-                    coin_sprites.add(coin)
+            for _ in range(NUM_COINS):
+                coin = Coin()
+                all_sprites.add(coin)
+                coin_sprites.add(coin)
 
         # --- Draw items
         screen.fill(WHITE)
