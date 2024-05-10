@@ -42,6 +42,8 @@ class Player(pg.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
+        self.lives_remaining = 9
+
         self.facing = 0  # 0 is right, 1 is left
 
     def update(self):
@@ -120,6 +122,8 @@ def start():
 
     score = 0
 
+    font = pg.font.SysFont("Futura", 24)
+
     # -- Sprite Groups
     # All sprites go in this sprite Group
     all_sprites = pg.sprite.Group()
@@ -182,12 +186,23 @@ def start():
 
         # TODO: Iterate through enemies collided to notify in console
         for enemy in enemies_collided:
-            print("COLLIDED!")
+            # Decrease player's life by one per second
+            player.lives_remaining -= (1 / 60)
+
+            # Print player's current lives remaining
+            print(f"Lives: {int(player.lives_remaining)}")
 
         # --- Draw items
         screen.fill(WHITE)
 
         all_sprites.draw(screen)
+
+        # Create score and live
+        score_image = font.render(f"Score: {score}", True, GREEN)
+        lives_image = font.render(f"Lives Remaining: {int(player.lives_remaining)}", True, GREEN)
+        # Draw/blit the image on the screen
+        screen.blit(score_image, (5, 5))
+        screen.blit(lives_image, (5,35))
 
         # Update the screen with anything new
         pg.display.flip()
