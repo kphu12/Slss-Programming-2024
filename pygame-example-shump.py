@@ -39,6 +39,23 @@ class Player(pg.sprite.Sprite):
 #      - Image - picture or pygame surface?
 #      - Spawn at the Player
 #      - Vertical velocity
+class Bullet(pg.sprite.Sprite):
+    def __init__(self, player_loc: list):
+        """
+        Params:
+            player_loc: x, y coords of centerx and top
+        """
+        super().__init__()
+
+        # Green rectangle
+        self.image = pg.Surface((10, 25))
+        self.image.fill(GREEN)
+
+        self.rect = self.image.get_rect()
+
+        #Spawn at the Player
+        self.rect.centerx = player_loc[0]
+        self.rect.bottom = player_loc[1]
 
 # TODO: Enemies
 #      - Move left to right to left
@@ -70,6 +87,8 @@ def start():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 done = True
+            if event.type == pg.MOUSEBUTTONDOWN:
+                all_sprites.add(Bullet((player.rect.centerx, player.rect.top)))
 
         # --- Update the world state
         all_sprites.update()
