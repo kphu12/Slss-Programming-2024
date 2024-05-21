@@ -1,3 +1,7 @@
+# Kendrick Phu
+# Pygame
+# May 14, 2024
+
 # pygame-example-shmup.py
 # Shoot 'em up
 
@@ -23,6 +27,9 @@ class Player(pg.sprite.Sprite):
         super().__init__()
 
         self.image = pg.image.load("./Images/galaga_ship.png")
+        self.image = pg.transform.scale(
+            self.image, (self.image.get_width() // 2, self.image.get_height() // 2)
+        )
 
         self.rect = self.image.get_rect()
 
@@ -43,7 +50,7 @@ class Bullet(pg.sprite.Sprite):
     def __init__(self, player_loc: list):
         """
         Params:
-            player_loc: x, y coords of centerx and top
+            player_loc: x,y coords of centerx and top
         """
         super().__init__()
 
@@ -53,9 +60,10 @@ class Bullet(pg.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-        #Spawn at the Player
+        # Spawn at the Player
         self.rect.centerx = player_loc[0]
         self.rect.bottom = player_loc[1]
+
 
 # TODO: Enemies
 #      - Move left to right to left
@@ -88,7 +96,8 @@ def start():
             if event.type == pg.QUIT:
                 done = True
             if event.type == pg.MOUSEBUTTONDOWN:
-                all_sprites.add(Bullet((player.rect.centerx, player.rect.top)))
+                bullet = Bullet((player.rect.centerx, player.rect.top))
+                all_sprites.add(bullet)
 
         # --- Update the world state
         all_sprites.update()
@@ -104,6 +113,7 @@ def start():
         # --- Tick the Clock
         clock.tick(60)  # 60 fps
 
+    pg.quit()
 
 def main():
     start()
