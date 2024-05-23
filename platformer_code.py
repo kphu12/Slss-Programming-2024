@@ -18,7 +18,8 @@ BLUE = (0, 0, 255)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
  
- 
+MARIO_IMAGE = pg.image.load("./Images/mario-new.png")
+
 class Player(pg.sprite.Sprite):
     """ This class represents the bar at the bottom that the player
         controls. """
@@ -39,6 +40,7 @@ class Player(pg.sprite.Sprite):
  
         # Set a referance to the image rect.
         self.rect = self.image.get_rect()
+        self.image = MARIO_IMAGE
  
         # Set speed vector of player
         self.change_x = 0
