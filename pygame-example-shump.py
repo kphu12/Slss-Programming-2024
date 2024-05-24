@@ -54,7 +54,10 @@ class Bullet(pg.sprite.Sprite):
         self.vel_y = random.choice(( -4, -5, -6))
     def update(self):
         self.rect.y += self.vel_y
-
+        
+        # Kill the bullet if it leaves the screen
+        if self.rect.bottom < 0:
+            self.kill()
 # TODO: enemies
 #   - move left to right to left
 class Enemy(pg.sprite.Sprite):
@@ -76,6 +79,8 @@ class Enemy(pg.sprite.Sprite):
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
             self.vel_x = -self.vel_x
+
+
 
 def start():
     """Environment Setup and Game Loop"""
